@@ -3,8 +3,8 @@
   <el-container class="home-container">
     <el-header>
       <div>
-        <img src="../assets/logo.png" alt="" width="55px" />
-        <span>电商管理后台</span>
+        <img src="../assets/logo.png" alt="" style="padding:10px" width="7%" />
+        <span>刀客塔</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
@@ -12,10 +12,12 @@
     <el-container>
       <!-- 侧边栏 -->
       <el-aside width="200px">
+        <!--unique-opened 之保持一个下拉菜单 -->
         <el-menu
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409eff"
+          :unique-opened="true"
         >
           <el-submenu v-for="item in menuslist" :index="item.id + ''" :key="item.id">
             <template slot="title">
@@ -100,6 +102,9 @@ export default {
 }
 .el-aside {
   background-color: #323743;
+  .el-menu{
+    border-right: none;
+  }
 }
 .el-main {
   background-color: #f5f5f5;
