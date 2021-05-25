@@ -1,46 +1,45 @@
 <template>
-  <!-- 头部区域 -->
   <el-container class="home-container">
+    <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/logo.png" alt="" style="padding:10px" width="7%" />
-        <span>刀客塔</span>
+        <img src="../assets/logo.png" width="10%" alt="">
+        <span>电商后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
-    <!-- 页面主题区 -->
+    <!-- 页面主体区域 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside :width="iscollapse ? '64px':'200px'">
-        <!-- 汉堡按钮 -->
+      <el-aside :width="isCollapse ? '64px' : '200px'">
         <div class="toggle-button" @click="toggleCollapse">|||</div>
-        <!--unique-opened 之保持一个下拉菜单 -->
-        <!-- router开启路由跳转 -->
-        <el-menu
-          background-color="#333744"
-          text-color="#fff"
-          active-text-color="#409eff"
-          :unique-opened="true"
-          :collapse="iscollapse"
-          :collapse-transition="false"
-          router
-          :default-active="activePath"
-        >
-          <el-submenu v-for="item in menuslist" :index="item.id + ''" :key="item.id">
+        <!-- 侧边栏菜单区域 -->
+        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409EFF" unique-opened :collapse="isCollapse" :collapse-transition="false" router :default-active="activePath">
+          <!-- 一级菜单 -->
+          <el-submenu :index="item.id + ''" v-for="item in menulist" :key="item.id">
+            <!-- 一级菜单的模板区域 -->
             <template slot="title">
-              <i :class="iconobj[item.id]"></i>
+              <!-- 图标 -->
+              <i :class="iconsObj[item.id]"></i>
+              <!-- 文本 -->
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item v-for="subitem in item.children" :key="subitem.id" :index="'/'+subitem.path"
-            @click="saveNavState('/' + subItem.path)">
-              <i :class="iconobj[subitem.id]"></i>
-              <span>{{subitem.authName}}</span>
+
+            <!-- 二级菜单 -->
+            <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
+              <template slot="title">
+                <!-- 图标 -->
+                <i :class="iconsObj[subItem.id]"></i>
+                <!-- 文本 -->
+                <span>{{subItem.authName}}</span>
+              </template>
             </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
-      <!-- 右侧内容组件 -->
+      <!-- 右侧内容主体 -->
       <el-main>
+        <!-- 路由占位符 -->
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -49,11 +48,11 @@
 
 <script>
 export default {
-  data(){
-    return{
-      // 菜单数据
-      menuslist:[],
-      iconobj:{
+  data() {
+    return {
+      // 左侧菜单数据
+      menulist: [],
+      iconsObj: {
         '125':'el-icon-user-solid',
         '103':'el-icon-s-tools',
         '101':'el-icon-s-goods',
@@ -68,39 +67,39 @@ export default {
         '107':'el-icon-document-copy',
         '146':'el-icon-tickets'
       },
-      // 汉堡按钮默认不折叠
-      iscollapse:false,
+      // 是否折叠
+      isCollapse: false,
+      // 被激活的链接地址
       activePath: ''
     }
   },
-  created(){
+  created() {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout() {
-      window.sessionStorage.clear();
-      this.$router.push("/login");
+      window.sessionStorage.clear()
+      this.$router.push('/login')
     },
-    //获取所有菜单
-    async getMenuList(){
-      //结构data 赋值res
-      const {data:res} = await this.$http.get('menus')
-      if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.menuslist = res.data
-      console.log(this.menuslist);
+    // 获取所有的菜单
+    async getMenuList() {
+      const { data: res } = await this.$http.get('menus')
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.menulist = res.data
+      console.log(res)
     },
-    //汉堡按钮
-    toggleCollapse(){
-      this.iscollapse = !this.iscollapse
+    // 点击按钮，切换菜单的折叠与展开
+    toggleCollapse() {
+      this.isCollapse = !this.isCollapse
     },
-    //保存路径
+    // 保存链接的激活状态
     saveNavState(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -108,12 +107,12 @@ export default {
   height: 100%;
 }
 .el-header {
-  background-color: #373d3f;
+  background-color: #373d41;
   display: flex;
   justify-content: space-between;
   padding-left: 0;
   align-items: center;
-  color: white;
+  color: #fff;
   font-size: 20px;
   > div {
     display: flex;
@@ -123,22 +122,29 @@ export default {
     }
   }
 }
+
 .el-aside {
-  background-color: #323743;
-  .el-menu{
+  background-color: #333744;
+  .el-menu {
     border-right: none;
   }
 }
+
 .el-main {
-  background-color: #f5f5f5;
+  background-color: #eaedf1;
 }
-.toggle-button{
+
+.iconfont {
+  margin-right: 10px;
+}
+
+.toggle-button {
   background-color: #4a5064;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 24px;
-  color: gray;
+  color: #fff;
   text-align: center;
-  letter-spacing: 2px;
+  letter-spacing: 0.2em;
   cursor: pointer;
 }
 </style>
