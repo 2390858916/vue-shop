@@ -3,8 +3,8 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/logo.png" width="10%" alt="">
-        <span>电商后台管理系统</span>
+        <img src="../assets/logo.png" width="7%" style="padding:20px" alt="">
+        <span>刀客塔</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
