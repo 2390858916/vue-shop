@@ -67,7 +67,7 @@ export default {
         //将登陆成功之后的token 保存到客户端的session Storage中
         console.log(res);
         window.sessionStorage.setItem('token',res.data.token);
-        //登陆成功跳转后台主页 路由地址主页 /home
+        //编程式导航对象 登陆成功跳转后台主页 路由地址主页 /home
         this.$router.push('/home')
 			})
 		}
