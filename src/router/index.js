@@ -2,6 +2,9 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../components/Login.vue";
 import Home from "../components/Home.vue";
+import welcome from "../components/welcome.vue";
+import Users from "../components/home/User.vue"
+import roles from "../components/home/roles.vue"
 
 Vue.use(VueRouter);
 
@@ -10,11 +13,21 @@ const routes = [
   { path: "/", redirect: "/login" },
   // 登录的路由规则
   { path: "/login", component: Login },
-  { path: "/home", component: Home },
+  { 
+    path: "/home",
+    component: Home,
+    redirect: '/welcome',
+    children:[
+      { path:'/welcome',component:welcome},
+      { path:'/users',component:Users},
+      { path:'/roles',component:roles}
+    ]
+  },
 ];
 
 const router = new VueRouter({
   routes,
+  mode:'history'
 });
 //挂载路由导航守卫
 router.beforeEach((to, from, next) => {
