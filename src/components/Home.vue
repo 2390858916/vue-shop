@@ -15,30 +15,16 @@
         <el-menu
           background-color="#333744"
           text-color="#fff"
-          active-text-color="#ffd04b"
+          active-text-color="#409eff"
         >
-          <el-submenu index="1">
+          <el-submenu v-for="item in menuslist" :index="item.id + ''" :key="item.id">
             <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
+              <i :class="iconobj[item.id]"></i>
+              <span>{{item.authName}}</span>
             </template>
-            <el-menu-item index="1-1">
-              <i class="el-icon-location"></i>
-              <span>二级菜单</span>
-            </el-menu-item>
-            <el-menu-item index="1-2">
-              <i class="el-icon-menu"></i>
-              <span>二级菜单</span>
-            </el-menu-item>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航二</span>
-            </template>
-            <el-menu-item index="2-1">
-                <i class="el-icon-location"></i>
-                <span>二级菜单</span>
+            <el-menu-item v-for="subitem in item.children" :key="subitem.id" :index="subitem.id + ''">
+              <i :class="iconobj[subitem.id]"></i>
+              <span>{{subitem.authName}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -51,13 +37,43 @@
 
 <script>
 export default {
+  data(){
+    return{
+      // 菜单数据
+      menuslist:[],
+      iconobj:{
+        '125':'el-icon-user-solid',
+        '103':'el-icon-s-tools',
+        '101':'el-icon-s-goods',
+        '102':'el-icon-s-order',
+        '145':'el-icon-s-data',
+        '110':'el-icon-user',
+        '111':'el-icon-setting',
+        '112':'el-icon-more-outline',
+        '104':'el-icon-goods',
+        '115':'el-icon-s-operation',
+        '121':'el-icon-menu',
+        '107':'el-icon-document-copy',
+        '146':'el-icon-tickets'
+      }
+    }
+  },
+  created(){
+    this.getMenuList()
+  },
   methods: {
     logout() {
-      //清楚token
       window.sessionStorage.clear();
-      //重定向到login页面
       this.$router.push("/login");
     },
+    //获取所有菜单
+    async getMenuList(){
+      //结构data 赋值res
+      const {data:res} = await this.$http.get('menus')
+      if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.menuslist = res.data
+      console.log(this.menuslist);
+    }
   },
 };
 </script>
